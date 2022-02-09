@@ -61,6 +61,7 @@ class OrderRepository implements OrderInterface
 
     public function createOrder($request)
     {
+//        dd('aa');
         // TODO: Implement updateVendor() method.
 //            dd($request->all());
 //        $customer = auth('sanctum')->user();
@@ -81,6 +82,7 @@ class OrderRepository implements OrderInterface
 //        dd($customer_order);
 //        dd($customer_id);
         $cart = Redis::get('cart_'.$customer_id);
+//        dd('aa');
         $cart_items = json_decode($cart, true);
 //        dd('cart_'.$customer_id);
 //        dd($cart_items);
@@ -89,6 +91,7 @@ class OrderRepository implements OrderInterface
             $requestItem = explode(',', $itemDetail);
             $productDetails[] = $requestItem;
         }
+//        dd('aa');
 //        dd($productDetails);
 //        dd($cart_items);
 
@@ -98,15 +101,12 @@ class OrderRepository implements OrderInterface
         }
 //        dd($total);
 
-//        dd($customer_order);
-        if(!($customer_order)){
-//            dd('cc');
-            return $this->createProductOrder($productDetails, $total, $request);
-        } elseif($customer_order->status == 0) {
+        if($customer_order->status == 0) {
 //            dd('ss');
             $customer_order->delete();
-            return $this->createProductOrder($productDetails, $total, $request);
         }
+        return $this->createProductOrder($productDetails, $total, $request);
+//        dd('aa');
 //        dd('qq');
         // return $this->ApiResponse(200,"Your Have an Order Not Paid Yet",null,$user_order);
     }
@@ -379,7 +379,7 @@ class OrderRepository implements OrderInterface
         $customer_id = auth()->user()->id;
         $cartValue = Redis::get('cart_'.$customer_id);
 //        dd($cartValue);
-        Redis::del($cartValue);
+//        Redis::del($cartValue);
         return  $this->ApiResponse(200,'Cart Data',null,json_decode($cartValue));
     }
 
